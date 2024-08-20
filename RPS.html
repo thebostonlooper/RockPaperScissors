@@ -1,1 +1,107 @@
-console.log("Hello World")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .choice-buttons {
+            margin: 20px;
+        }
+        .choice-buttons button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+        }
+        #result, #scoreboard {
+            margin: 20px;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rock Paper Scissors Game</h1>
+
+    <div class="choice-buttons">
+        <button onclick="playGame('rock')">Rock</button>
+        <button onclick="playGame('paper')">Paper</button>
+        <button onclick="playGame('scissors')">Scissors</button>
+    </div>
+
+    <div id="result"></div>
+    <div id="scoreboard"></div>
+
+    <script>
+        let humanScore = 0;
+        let computerScore = 0;
+
+        function getComputerChoice() {
+            const randomNumber = Math.random();
+            if (randomNumber < 0.33) {
+                return "rock";
+            } else if (randomNumber < 0.66) {
+                return "paper";
+            } else {
+                return "scissors";
+            }
+        }
+
+        function playRound(humanChoice, computerChoice) {
+            humanChoice = humanChoice.toLowerCase();
+            computerChoice = computerChoice.toLowerCase();
+
+            if (humanChoice === computerChoice) {
+                return "It's a tie!";
+            } else if (
+                (humanChoice === "rock" && computerChoice === "scissors") ||
+                (humanChoice === "scissors" && computerChoice === "paper") ||
+                (humanChoice === "paper" && computerChoice === "rock")
+            ) {
+                humanScore++;
+                return `You win! ${humanChoice.charAt(0).toUpperCase() + humanChoice.slice(1)} beats ${computerChoice}`;
+            } else {
+                computerScore++;
+                return `You lose! ${computerChoice.charAt(0).toUpperCase() + computerChoice.slice(1)} beats ${humanChoice}`;
+            }
+        }
+
+        function playGame(humanChoice) {
+            let computerChoice = getComputerChoice();
+            let result = playRound(humanChoice, computerChoice);
+
+            // Update the result and scoreboard in the UI
+            document.getElementById('result').innerText = result;
+            document.getElementById('scoreboard').innerText = `Human: ${humanScore} - Computer: ${computerScore}`;
+
+            // Check if 5 rounds are complete and declare a winner
+            if (humanScore + computerScore === 5) {
+                declareWinner();
+            }
+        }
+
+        function declareWinner() {
+            let finalMessage = '';
+            if (humanScore > computerScore) {
+                finalMessage = "Congratulations! You are the overall winner!";
+            } else if (computerScore > humanScore) {
+                finalMessage = "Sorry, the computer wins this time.";
+            } else {
+                finalMessage = "It's a tie overall!";
+            }
+
+            document.getElementById('result').innerText = finalMessage;
+
+            // Reset the game
+            humanScore = 0;
+            computerScore = 0;
+        }
+    </script>
+
+</body>
+</html>
